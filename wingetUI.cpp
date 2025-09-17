@@ -1,9 +1,13 @@
 ﻿// wingetUI.cpp
-#include <graphics.h>   // EasyX
-#include <windows.h>
 #include <tchar.h>
 #include "framework.h"
+#include "wingetUI.h"
 
+#pragma comment(lib,"Kernel32.lib")
+// 在文件顶部添加以下宏定义，确保 GetTickCount64 可用
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0600
+#endif
 #ifndef CLEARTYPE_QUALITY
 #define CLEARTYPE_QUALITY 5
 #endif
@@ -74,7 +78,10 @@ int APIENTRY wWinMain(
     const int btnSize = 30;  // 基坐标（像素）
     const int margin = 5;   // 基坐标（像素）
 
+	DWORD  lastTime = GetTickCount();
+
     while (1) {
+
         // --- 绘制（使用 缩放后坐标 * scale） ---
         cleardevice();
 
@@ -168,8 +175,7 @@ int APIENTRY wWinMain(
                 int winWpx = winStartRect.right - winStartRect.left;
                 int winHpx = winStartRect.bottom - winStartRect.top;
 
-                SetWindowPos(hwnd, NULL, newLeft, newTop, 0, 0,
-                    SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+                MoveWindow(hwnd, newLeft, newTop, 640, 480,0);
             }
         }
         else {
@@ -177,7 +183,7 @@ int APIENTRY wWinMain(
             dragging = false;
         }
 
-        Sleep(10);
+        //Sleep(10);
     }
 
     EndBatchDraw();
